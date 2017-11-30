@@ -1,0 +1,86 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<beans xmlns="http://www.springframework.org/schema/beans"
+       xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
+       xsi:schemaLocation="http://www.springframework.org/schema/beans
+           http://www.springframework.org/schema/beans/spring-beans.xsd">
+
+    <!-- 主数据源配置 -->
+    <bean id="masterDataSource" class="com.alibaba.druid.pool.DruidDataSource" destroy-method="close" init-method="init" primary="true">
+        <property name="username" value="${druid.datasource.username}"/>
+        <property name="password" value="${druid.datasource.password}"/>
+        <property name="url" value="${druid.datasource.url}"/>
+        <property name="filters" value="${druid.datasource.filters}"/>
+        <property name="maxActive" value="${druid.datasource.maxActive}"/>
+        <property name="initialSize" value="${druid.datasource.initialSize}"/>
+        <property name="maxWait" value="${druid.datasource.maxWait}"/>
+        <property name="minIdle" value="${druid.datasource.minIdle}"/>
+        <property name="timeBetweenEvictionRunsMillis" value="${druid.datasource.timeBetweenEvictionRunsMillis}"/>
+        <property name="minEvictableIdleTimeMillis" value="${druid.datasource.minEvictableIdleTimeMillis}"/>
+        <property name="validationQuery" value="${druid.datasource.validationQuery}"/>
+        <property name="testWhileIdle" value="${druid.datasource.testWhileIdle}"/>
+        <property name="testOnBorrow" value="${druid.datasource.testOnBorrow}"/>
+        <property name="testOnReturn" value="${druid.datasource.testOnReturn}"/>
+        <property name="poolPreparedStatements" value="${druid.datasource.poolPreparedStatements}"/>
+        <property name="maxOpenPreparedStatements" value="${druid.datasource.maxOpenPreparedStatements}"/>
+    </bean>
+
+    <!-- 从数据源配置 -->
+    <bean id="slaveDataSource1" class="com.alibaba.druid.pool.DruidDataSource" destroy-method="close" init-method="init">
+        <property name="username" value="${druid.datasource2.username}"/>
+        <property name="password" value="${druid.datasource2.password}"/>
+        <property name="url" value="${druid.datasource2.url}"/>
+        <property name="filters" value="${druid.datasource2.filters}"/>
+        <property name="maxActive" value="${druid.datasource2.maxActive}"/>
+        <property name="initialSize" value="${druid.datasource2.initialSize}"/>
+        <property name="maxWait" value="${druid.datasource2.maxWait}"/>
+        <property name="minIdle" value="${druid.datasource2.minIdle}"/>
+        <property name="timeBetweenEvictionRunsMillis" value="${druid.datasource2.timeBetweenEvictionRunsMillis}"/>
+        <property name="minEvictableIdleTimeMillis" value="${druid.datasource2.minEvictableIdleTimeMillis}"/>
+        <property name="validationQuery" value="${druid.datasource2.validationQuery}"/>
+        <property name="testWhileIdle" value="${druid.datasource2.testWhileIdle}"/>
+        <property name="testOnBorrow" value="${druid.datasource2.testOnBorrow}"/>
+        <property name="testOnReturn" value="${druid.datasource2.testOnReturn}"/>
+        <property name="poolPreparedStatements" value="${druid.datasource2.poolPreparedStatements}"/>
+        <property name="maxOpenPreparedStatements" value="${druid.datasource2.maxOpenPreparedStatements}"/>
+    </bean>
+
+    <!-- 从数据源配置 -->
+    <bean id="slaveDataSource2" class="com.alibaba.druid.pool.DruidDataSource" destroy-method="close" init-method="init">
+        <property name="username" value="${druid.datasource2.username}"/>
+        <property name="password" value="${druid.datasource2.password}"/>
+        <property name="url" value="${druid.datasource2.url}"/>
+        <property name="filters" value="${druid.datasource2.filters}"/>
+        <property name="maxActive" value="${druid.datasource2.maxActive}"/>
+        <property name="initialSize" value="${druid.datasource2.initialSize}"/>
+        <property name="maxWait" value="${druid.datasource2.maxWait}"/>
+        <property name="minIdle" value="${druid.datasource2.minIdle}"/>
+        <property name="timeBetweenEvictionRunsMillis" value="${druid.datasource2.timeBetweenEvictionRunsMillis}"/>
+        <property name="minEvictableIdleTimeMillis" value="${druid.datasource2.minEvictableIdleTimeMillis}"/>
+        <property name="validationQuery" value="${druid.datasource2.validationQuery}"/>
+        <property name="testWhileIdle" value="${druid.datasource2.testWhileIdle}"/>
+        <property name="testOnBorrow" value="${druid.datasource2.testOnBorrow}"/>
+        <property name="testOnReturn" value="${druid.datasource2.testOnReturn}"/>
+        <property name="poolPreparedStatements" value="${druid.datasource2.poolPreparedStatements}"/>
+        <property name="maxOpenPreparedStatements" value="${druid.datasource2.maxOpenPreparedStatements}"/>
+    </bean>
+
+    <!-- 数据源注入到动态数据源 -->
+    <bean id="dynamicDataSource" class="com.rainwen.mybatis.configration.rwdb.DynamicDataSource">
+        <property name="targetDataSources">
+            <map>
+                <entry key="master" value-ref="masterDataSource"/>
+                <entry key="slave1" value-ref="slaveDataSource1"/>
+                <entry key="slave2" value-ref="slaveDataSource2"/>
+            </map>
+        </property>
+        <property name="slaveDataSources">
+            <list>
+                <value>slave1</value>
+                <value>slave2</value>
+            </list>
+        </property>
+        <!-- 设置默认数据源 -->
+        <property name="defaultTargetDataSource" ref="masterDataSource"/>
+    </bean>
+
+</beans>
